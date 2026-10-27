@@ -1,0 +1,219 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>R Statistics Lab Academy</title><meta name="color-scheme" content="light dark">
+<style>
+:root{--bg:#f3f6f9;--sf:#fff;--tx:#14202b;--mu:#5a6b7a;--ac:#0e7c86;--ak:#c2410c;--bd:#d8e0e7;--cb:#0f1b24;--cf:#d6e6ee;--sb:#0c2a33;--st:#cfe3e8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0b1218;--sf:#131d26;--tx:#e6eef4;--mu:#92a4b3;--ac:#3cc2cc;--ak:#fb923c;--bd:#26343f;--cb:#070c10}}
+*{box-sizing:border-box}html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
+h1,h2,h3{font-family:Georgia,"Iowan Old Style",serif;line-height:1.25}
+#side{position:fixed;inset:0 auto 0 0;width:250px;background:var(--sb);color:var(--st);overflow:auto;padding:14px 10px;z-index:5}
+#side h1{font-size:19px;color:#fff;margin:4px 8px 2px}#side small{display:block;margin:0 8px 12px;font-size:12px;opacity:.8}
+#side a{display:block;padding:6px 10px;border-radius:6px;color:var(--st);text-decoration:none;font-size:14px;cursor:pointer}#side a:hover,#side a.on{background:#17505c;color:#fff}
+#side b{display:block;margin:12px 10px 4px;font-size:12px;opacity:.7;font-weight:600}
+#main{margin-left:250px;padding:18px 22px 60px;max-width:960px}
+#top{display:flex;gap:8px;margin-bottom:14px}#top input{flex:1;padding:10px 12px;border:1px solid var(--bd);border-radius:8px;background:var(--sf);color:var(--tx);font:inherit}
+#menu{display:none;padding:8px 12px;border:1px solid var(--bd);border-radius:8px;background:var(--sf);color:var(--tx)}
+.card{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:14px 16px;margin:12px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}.stat{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:12px}.stat b{font:700 28px Georgia,serif;color:var(--ac);display:block}
+.q{border-left:4px solid var(--ak)}.tag{display:inline-block;font-size:12px;padding:1px 8px;border-radius:99px;background:var(--bd);color:var(--mu);margin-right:4px}
+details{border:1px solid var(--bd);border-radius:8px;margin:8px 0;background:var(--sf)}summary{padding:8px 12px;cursor:pointer;font-weight:600}details>div{padding:0 14px 10px}
+pre{position:relative;background:var(--cb);color:var(--cf);padding:12px;border-radius:8px;overflow-x:auto;font:13px/1.5 ui-monospace,Consolas,monospace;margin:8px 0}
+.cp{position:absolute;right:6px;top:6px;font-size:12px;padding:3px 8px;border:0;border-radius:5px;background:#1d6f78;color:#fff;cursor:pointer}
+.warn{background:#fff4e5;color:#7a3b00;border:1px solid #f0b66b;border-radius:8px;padding:8px 12px;margin:8px 0}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .warn{background:#3a2610;color:#ffd7a8}}
+table{border-collapse:collapse;width:100%;font-size:14px;display:block;overflow-x:auto}td,th{border:1px solid var(--bd);padding:5px 8px;text-align:left}th{background:var(--bd)}
+dt{font-weight:700;margin-top:8px;color:var(--ac)}dd{margin:0 0 0 12px}.sw{font-size:14px}label{font-size:14px;color:var(--mu)}
+@media(max-width:800px){#side{transform:translateX(-100%);transition:transform .2s}#side.open{transform:none}#main{margin:0;padding:12px 12px 60px}#menu{display:block}}
+</style></head><body>
+<nav id="side"></nav>
+<div id="main"><div id="top"><button id="menu" onclick="side.classList.toggle('open')">Menu</button><input id="s" placeholder="Search a concept, function, symbol or lab number" oninput="srch(this.value)"></div><div id="v"></div></div>
+<script>
+const E=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const U="UNCLEAR FROM PROVIDED MATERIAL";
+const LABS=[
+{n:1,t:"Introduction: Understanding Data types; importing/exporting data",qs:[
+{q:"Generate data, assign variables, combine values into a vector, do member-wise arithmetic on vectors, convert to character, paste strings.",
+m:"Create numbers in R, store them under names, and do maths on whole lists of numbers at once.",
+c:"<b>Vector</b> = ordered list of same-type values. Arithmetic is element-by-element (a+b adds position 1 with position 1, etc.). Recognise it: 'combine', 'assign', 'member-wise'.",
+code:`1:10\nX=10; X<-10; 10->X\nc(1,2,5)\na = c(1, 3, 5, 7)\nb = c(2, 4, 6, 8)\na+b\na-b\n5*a\na*b\na/b\nX=as.character(5.2)\npaste("Baa", "Baa", "Black", "Sheep")`,
+a:"1:10 = colon operator, sequence 1 to 10; = , <- , -> = three ways to assign (<- is the R convention, = also works at top level, -> assigns right-to-left); c() = 'combine', builds a vector; a+b, a*b = member-wise; 5*a = constant multiplied with every element; as.character() = converts number to text (note the quotes in output); paste() = joins strings with a space.",
+o:"1:10 -> 1 2 3 ... 10. a+b -> 3 7 11 15. a-b -> -1 -1 -1 -1. 5*a -> 5 15 25 35. a*b -> 2 12 30 56. a/b -> 0.500 0.750 0.833 0.875. X -> \"5.2\". paste -> \"Baa Baa Black Sheep\".",
+e:"Name vector -> assign with c() -> operate -> print by typing the name.",
+v:"Why c()? It is how R builds a vector. Difference between <- and =? Same effect for assignment; = inside a function call means a named argument."},
+{q:"Installing and loading R packages; importing CSV/Excel data (readr, readxl, read.csv(file.choose())).",
+m:"Add extra toolboxes to R, then read a data file into a table.",
+c:"<b>Package</b> = bundle of extra functions from CRAN. Install once with install.packages(), load every session with library().",
+code:`install.packages("moments")\ninstall.packages(c("moments", "ggplot2", "devtools"))\nlibrary(readr)\nBook2 <- read_csv("C:/Users/admin/Desktop/Book2.csv")\nlibrary(readxl)\nBook2 <- read_excel("C:/Users/admin/Desktop/Book2.xlsx")\nView(Book2)\nread.csv(file.choose())`,
+a:"install.packages(\"x\") = download from CRAN (quotes: name is text); library(x) = switch it on (no quotes needed); read_csv / read_excel = import functions from readr / readxl; the path string = file location; View() = open spreadsheet-style viewer; file.choose() = opens a file-picker dialog.",
+o:"Data appears in the Environment pane; View() opens a table tab.",e:"Install once -> library() -> read -> View.",v:"Install vs library? Install downloads once; library loads in each session."}]},
+{n:2,t:"Computing Summary Statistics / plotting and visualizing data using Tabulation and Graphical Representations",qs:[
+{q:"Create vectors empid, age, gender, status; combine into a data frame; label gender and status as factors; extract male and female subsets.",
+m:"Build a table of 15 employees, give 0/1 codes readable names, and split the table by gender.",
+c:"<b>Data frame</b> = table (rows = observations, columns = variables). <b>Factor</b> = categorical variable with levels. Recognise it: 'labels', 'extract data of ...'.",
+code:`empid=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15)\nage=c(30,37,45,32,50,60,35,32,34,43,32,30,43,50,60)\ngender=c(0,1,0,1,1,1,0,0,1,0,0,1,1,0,0)\nstatus=c(1,1,2,2,1,1,1,2,2,1,2,1,2,1,2)\nempinfo=data.frame(empid,age,gender,status)\nempinfo$gender=factor(empinfo$gender,labels=c("male","female"))\nempinfo$status=factor(empinfo$status,labels=c("staff","faculty"))\nmale=subset(empinfo,empinfo$gender=="male")\nfemale=subset(empinfo, empinfo$gender=='female')`,
+a:"data.frame() = joins vectors as columns; $ = pick a column by name (empinfo$age; also [[\"age\"]] returns the vector, [\"age\"] returns a one-column data frame); factor(x, labels=) = turns 0,1 into male,female in order; subset(data, condition) = keep rows where condition TRUE; == = equality test (single = would be assignment/argument); \"male\" in quotes = text value.",
+o:"male has 8 rows (empid 1,3,7,8,10,11,14,15); female has 7 rows.",e:"Vectors -> data.frame -> factor() -> subset().",v:"What does $ do? Extracts a column from a data frame."},
+{q:"Summary statistics and tables (one-way and two-way).",
+m:"Get min, quartiles, mean, max for the data and count how many are in each category.",
+c:"<b>Summary statistics</b> describe the centre and spread. <b>Frequency table</b> counts categories. Mean = sum/n; median = middle value.",
+code:`summary(empinfo)\nsummary(male)\nsummary(female)\nsummary(age)\ntable1=table(empinfo$gender)\ntable2=table(empinfo$status)\ntable3=table(empinfo$gender, empinfo$status)`,
+a:"summary() = Min, 1st Qu., Median, Mean, 3rd Qu., Max for numbers, counts for factors; table(x) = one-way counts; table(x,y) = two-way cross tabulation (rows x, columns y).",
+o:"summary(age): Min 30, 1st Qu 32, Median 37, Mean 40.87, 3rd Qu 47.5, Max 60. table1: male 8, female 7. table3: male staff 4 faculty 4; female staff 4 faculty 3.",e:"Numeric -> summary(); categorical -> table().",v:"Mean vs median? Mean is the average and is pulled by extremes; median is the middle value."},
+{q:"Graphical representation: line plot of age, pie chart, bar plot with legend, box plot.",
+m:"Draw four charts from the employee data.",
+c:"Choose the plot by data type: pie/bar = categories; boxplot = spread of numbers per group; plot(type=\"l\") = values in order.",
+code:`plot(empinfo$age,type="l",main="Age of employees",xlab="empid",ylab="age in years",col="blue")\npie(table1)\nbarplot(table3,beside=T,xlim=c(1,15),ylim=c(0,5),col=c("blue", "red"))\nlegend("topright",legend=rownames(table3),fill=c('blue','red'),bty="n")\nboxplot(empinfo$age~empinfo$status,col=c('red','blue'))`,
+a:"type=\"l\" = join points with a line; main/xlab/ylab = title and axis labels; col = colour (text in quotes); beside=T = bars side by side (T = TRUE); xlim/ylim = axis range c(min,max); legend(\"topright\", legend=, fill=, bty=\"n\") = key box with no border; ~ = 'age depends on status' (age grouped by status). If I change type=\"l\" to \"p\" you get points only.",
+o:"Line goes 30 to 60 with peaks at empid 6 and 15. Pie ~ 8:7. Bars of height 4,4 and 4,3. Box plots show staff median higher than faculty.",e:"Name the data type -> choose plot -> add labels -> interpret.",v:"Why a boxplot? To compare spread/median between groups."}]},
+{n:3,t:"Applying correlation and simple linear regression model to real data set; computing and interpreting the coefficient of determination",qs:[
+{q:"Problem-1: Import the inbuilt data set \"cars\"; summary, variance, covariance, correlation (cor.test pearson/spearman), plot, and regression lines of speed on dist and dist on speed.",
+m:"Measure how strongly speed and stopping distance move together and fit straight lines.",
+c:"<b>Pearson r</b> = strength of straight-line relationship, from -1 to +1. r = cov(x,y)/(sd(x)sd(y)). <b>Regression</b> Y = a + bX predicts Y. R² = proportion of variation explained. H0 for cor.test: true correlation = 0.",
+code:`data=cars\nsummary(data)\nv1=var(data$speed)\ncovariance=cov(data$speed,data$dist)\ncorr=covariance/(sd(data$speed)*sd(data$dist))\ncorr=cor(data$speed,data$dist)\ncor.test(data$speed,data$dist)\ncor.test(data$speed,data$dist,method="pearson")\ncor.test(data$speed,data$dist,method="spearman")\nplot(data$speed,data$dist)\nregression1=lm(data$speed~data$dist)\nabline(regression1)\nsummary(regression1)\nregression2=lm(data$dist~data$speed)\nabline(regression2)\nsummary(regression2)`,
+a:"cars = built-in data set; var/sd/cov/cor = variance / standard deviation / covariance / correlation; cor.test(x,y,method=\"pearson\") = test of H0: r=0 (method is text in quotes; \"spearman\" uses ranks, for monotonic or non-normal data); plot(x,y) = scatter plot; lm(y~x) = linear model, left of ~ is the response; abline(model) = draw fitted line on existing plot; summary(model) = coefficients, R², F, p.",
+o:"var(speed)=27.959, var(dist)=664.061, cov=109.947, r=0.8069, t=9.464, df=48, p=1.49e-12, CI 0.6816 to 0.8862, Spearman rho=0.8304. dist on speed: intercept -17.579, slope 3.932, R²=0.6511. speed on dist: intercept 8.284, slope 0.1656.",
+e:"cor() for strength -> cor.test() for significance -> plot -> lm -> abline -> read R² and p.",v:"Correlation vs causation? r shows association only. Why two regression lines? Y on X and X on Y are different lines."},
+{q:"Problem: The body weight and the BMI of 12 school going children ... fit a simple regression model BMI on weight and examine the results.",
+m:"Predict BMI from weight and judge how good the fit is.",
+c:"Simple linear regression with the response BMI and predictor weight. Interpretation: slope = change in BMI per kg; R² = share explained.",
+code:`weight=c(15,26,27,2,25.5,27,32,18,22,20,26,24)\nbmi=c(133.35,16.1,16.74,16,13.59,15.73,15.65,13.85,16.07,12.8,13.65,14.42)\ncor(weight,bmi)\nmode1<-lm(bmi~weight)\nsummary.lm(mode1)\ncoeff=coefficients(mode1)\ncoeff`,
+a:"c() makes vectors; cor() = r; lm(bmi~weight) = BMI explained by weight; summary.lm() = detailed fit; coefficients() = extract intercept and slope.",
+o:"r=-0.2842, intercept 52.334, slope -1.248, R²=0.08076, p=0.3707 (as printed in the lab).",
+w:"<span class='warn'>"+U+": the printed code has weight 2 (the table says 15..) and BMI 133.35 (table says 13.35); the written interpretation (r=0.5790, R²=0.3353, equation 10.7349+0.1710*weight) does NOT match the printed output. Safest: use the output of the code you run, and mention the typo to your faculty.</span>",
+e:"Enter data carefully -> cor -> lm -> summary -> interpret slope, R², p.",v:"Why is R² low here? Possible data-entry outlier; one extreme value distorts the fit."},
+{q:"Exercise 3: X 15 16 20 14 17 18 19 21 22; Y 30 39 32 31 34 35 37 39 40. Find Y when X is 29; X when Y is 45; means; both regression lines with abline in different colours; coefficients; correlation.",
+m:"Fit both regression lines, predict, and plot.",
+c:"Prediction = plug into the fitted line; the means satisfy both lines (the lines intersect at (mean X, mean Y)).",
+code:`X=c(15,16,20,14,17,18,19,21,22)\nY=c(30,39,32,31,34,35,37,39,40)\nr1=lm(Y~X); r2=lm(X~Y)\npredict(r1,data.frame(X=29))\npredict(r2,data.frame(Y=45))\nplot(X,Y)\nabline(r1,col="red"); abline(r2,col="blue")\ncoef(r1); coef(r2); cor(X,Y)\nmean(X); mean(Y)`,
+a:"predict(model, newdata) = fitted value for new input (column name must match the variable); col = line colour; coef() = coefficients. This is my solution pattern; the exercise has no printed answer. Exercises 1 and 2 (Excel import and regression coefficient properties) follow Lab 1 import and b_yx*b_xy=r².",
+o:"Run in RStudio; values are not given in the lab.",e:"Two lm() -> predict() -> plot + two abline().",v:"Why is predicting X=29 risky? It is outside the data range (extrapolation)."}]},
+{n:4,t:"Applying multiple linear regression model to real dataset; computing and interpreting the multiple coefficients of determination",qs:[
+{q:"Problem 1: Sale of a product (Y, lakhs) influenced by advertising expenditure X1 and number of sales persons X2; 8 regions.",
+m:"Predict sales from two variables together.",
+c:"<b>Multiple regression</b> Y=b0+b1X1+b2X2+e. Multiple R² = share of Y variation explained by all predictors; F-test checks the whole model; t-test (Pr(>|t|)) checks each predictor.",
+code:`Y=c(110,80,70,120,150,90,70,120)\nX1=c(30,40,20,50,60,40,20,60)\nX2=c(11,10,7,15,19,12,8,14)\nRegModel=lm(Y~X1+X2)\nsummary(RegModel)\nlibrary(scatterplot3d)\nscatterplot3d(Y,X1,X2)`,
+a:"Y~X1+X2 = Y modelled on X1 AND X2 (+ means 'also include'); summary = coefficient table; library(scatterplot3d) = 3-D plot package (install.packages once); scatterplot3d(a,b,c) = a on x-axis, b on y, c on z.",
+o:"Y = 16.8314 - 0.2442*X1 + 7.8488*X2; Multiple R²=0.9191, Adj R²=0.8867, F=28.4 on 2 and 5 DF, p=0.001862. Only X2 is significant (p=0.0159).",
+w:"<span class='warn'>"+U+": the lab's written interpretation says R²=0.9593, but the output shows 0.9191. Trust the output.</span>",
+e:"Vectors -> lm(Y~X1+X2) -> summary -> read R², F p-value, each t p-value.",v:"Multiple vs adjusted R²? Adjusted penalises useless predictors."},
+{q:"Problem 2: data=mtcars; X=mtcars$mpg, Y=mtcars$disp, Z=mtcars$hp; regress Z on X and Y; visualize the plane.",
+m:"Predict horsepower from mpg and displacement and draw the fitted plane.",
+c:"Same multiple regression with a built-in data set; the plane is the 2-predictor version of a line.",
+code:`data=mtcars\nX=mtcars$mpg\nY=mtcars$disp\nZ=mtcars$hp\nRegModel<- lm(Z~X+Y)\nsummary(RegModel)\nlibrary(scatterplot3d)\ngraph=scatterplot3d(X,Y,Z)\ngraph$plane3d(RegModel)`,
+a:"mtcars = built-in car data; mtcars$mpg = column; graph$plane3d(model) = $ here accesses a function stored inside the plot object, drawing the regression plane.",
+o:"Z = 172.2204 - 4.2732*X + 0.2614*Y; R²=0.6653, Adj 0.6423, F=28.83 on 2 and 29 DF, p=1.279e-07. Y is significant (p=0.0267), X is not at 5% (p=0.0737).",e:"Extract columns with $ -> lm -> summary -> scatterplot3d -> plane3d.",v:"What does the plane show? The fitted values of Z for all X,Y."}]},
+{n:5,t:"Fitting the Probability Distributions — Binomial Distribution in R",qs:[
+{q:"Problem 1: Four fair coins tossed. X = number of heads. Find (i) exactly 2 heads, (ii) at least 2, (iii) at most 2, (iv) E(X), (v) Var(X), (vi) visualize.",
+m:"Count heads in 4 tosses and get probabilities, mean and variance.",
+c:"<b>Binomial</b> X~Bin(n,p): fixed n, two outcomes, constant p, independent trials. P(X=x)=C(n,x)p^x(1-p)^(n-x); E=np; Var=np(1-p). Recognise: 'number of successes in n trials'.",
+code:`n <- 4\np <- 0.5\nx <- 0:n\npx <- dbinom(x, n, p)\ndata.frame(x, px)\nprob_exact_2 <- dbinom(2, n, p)\nprob_atleast_2 <- sum(dbinom(2:4, n, p))\n1 - pbinom(1, n, p)\nprob_atmost_2 <- sum(dbinom(0:2, n, p))\npbinom(2, n, p)\nEx <- weighted.mean(x, px)\nVarx <- weighted.mean(x * x, px) - (weighted.mean(x, px))^2\nplot(x, px, type = "h", xlab = "Values of X", ylab = "Probability distribution of X", main = "Binomial distribution")`,
+a:"dbinom: d = probability at one value, binom = binomial; dbinom(x,n,p) = P(X=x); pbinom = P(X<=x); 'at least 2' = 1-pbinom(1,...) because P(X>=2)=1-P(X<=1); 2:4 = 2,3,4; weighted.mean(x,px) = sum of x*P = E(X); Var=E(X²)-[E(X)]²; ^2 = squared; type=\"h\" = vertical lines (histogram-like) for discrete data. Math to R: n -> n (size), p -> p (prob), x -> x.",
+o:"Probabilities 0.0625, 0.25, 0.375, 0.25, 0.0625. (i) 0.375 (ii) 0.6875 (iii) 0.6875 (iv) 2 (v) 1. Plot symmetric, peak at X=2.",e:"Name distribution -> n,p -> d for equal, p for cumulative, 1-p for 'at least' -> plot type=\"h\".",v:"dbinom vs pbinom? d gives P(X=x), p gives P(X<=x). Why 1-pbinom(1)? Complement rule."},
+{q:"Problem 2: Each component has probability 0.2 of being defective; five selected independently; find P(X=2), P(X>=2), P(X<=2), E(X), Var(X), visualize.",
+m:"Same method with n=5, p=0.2.",c:"Binomial with n=5, p=0.2 (success = defective).",
+code:`n <- 5\np <- 0.2\nx <- 0:n\npx <- dbinom(x, n, p)\nP_exact_2 <- dbinom(2, n, p)\nP_atleast_2 <- 1 - pbinom(1, n, p)\nP_atmost_2 <- pbinom(2, n, p)\nEx <- weighted.mean(x, px)\nVarx <- weighted.mean(x * x, px) - Ex^2\nplot(x, px, type = "h", xlab = "Number of defective components", ylab = "Probability", main = "Binomial Distribution: Quality Control")`,
+a:"Same as Problem 1; here 'success' means defective. If prob changes to 0.8 the plot shifts to the right (more defects likely).",
+o:"0.2048, 0.26272, 0.94208, E=1, Var=0.8. Right-skewed plot.",e:"n,p -> dbinom/pbinom -> weighted.mean -> plot.",v:"Why is success 'defective'? Success = the event we count."},
+{q:"Exercise: A student answers an eight-question multiple-choice quiz by guessing (four choices). X = correct answers. Identify n and p; all values and probabilities; exactly 3; at least 5; at most 2; E and Var; plot type=\"h\"; interpret shape.",
+m:"Apply the binomial method yourself.",c:"n=8, p=1/4=0.25: X~Bin(8,0.25). E=np=2, Var=np(1-p)=1.5.",
+code:`n <- 8; p <- 0.25\nx <- 0:n\npx <- dbinom(x, n, p)\ndbinom(3, n, p)\n1 - pbinom(4, n, p)\npbinom(2, n, p)\nweighted.mean(x, px)\nweighted.mean(x*x, px) - weighted.mean(x, px)^2\nplot(x, px, type="h")`,
+a:"At least 5 = 1-pbinom(4,...). Expected shape: right-skewed, peak at 2, because p<0.5. (My solution; the lab gives no printed answer.)",o:"E=2, Var=1.5; other values: run in RStudio.",e:"n=8,p=0.25 -> same six steps.",v:"Why right-skewed? p<0.5 puts the mass on small X."}]},
+{n:6,t:"Normal distribution, Poisson distribution",qs:[
+{q:"A manufacturer of pins knows that 2% of his products are defective. Boxes of 20; number of boxes containing (i) at least 2 defective (ii) exactly 2 (iii) at most 2 in a consignment of 1000 boxes (iv) plot the distribution (v) E(x) (vi) Variance of X?",
+m:"Count defects per box with rare events, then scale by 1000 boxes.",
+c:"<b>Poisson</b> X~Pois(λ): counts of rare events in a fixed interval; P(X=x)=e^-λ λ^x/x!; E=Var=λ. Here λ=m*ps=20*0.02=0.4.",
+code:`m=20\nps=0.02\nlambda=m*ps\np1=sum(dpois(2:m,lambda))\nround(1000*p1)\np2=dpois(2,lambda)\nround(1000*p2)\np3=sum(dpois(0:2, lambda))\nround(1000*p3)\nx1=0:m\npx1=dpois(x1,lambda)\nplot(x1,px1,type="h",xlab="values of x",ylab="Probability distribution of x",main="Poisson distribution")\nEx1=weighted.mean(x1,px1)\nVarx1=weighted.mean(x1*x1,px1)-(weighted.mean(x1 ,px1))^2`,
+a:"dpois(x,lambda) = P(X=x) (d/pois as in dbinom); lambda = mean rate (note: the lab writes lambda, not λ, because R names cannot contain Greek); round(v) = nearest whole number; 1000*p = expected number of boxes.",
+o:"λ=0.4; p1=0.06155 -> 62 boxes; p2=0.05363 -> 54; p3=0.99207 -> 992; E=0.4; Var=0.4. Plot falls sharply from x=0.",e:"λ=n*p -> dpois -> multiply by 1000 -> round.",v:"Why Poisson not binomial? Large n, small p: Poisson approximates the binomial."},
+{q:"Normal: A company finds that the time to complete a job has a normal distribution with mean 20 minutes and S.D 5. What proportion of jobs take: i. less than 15 ii. more than 25 iii. between 15 and 25 iv. plot v. table.",
+m:"Find areas under a bell curve.",
+c:"<b>Normal</b> N(μ,σ): continuous, bell-shaped; probability = area under the curve. pnorm gives area to the left. Z=(x-μ)/σ.",
+code:`x=seq(0,40)\ny=dnorm(x,mean=20,sd=5)\nplot(x,y,type='l')\np1=pnorm(15,mean=20,sd=5)\np2=pnorm(40,mean=20,sd=5)-pnorm(25,mean=20,sd=5)\np3=pnorm(25,mean=20,sd=5)-pnorm(15,mean=20,sd=5)\nx2=seq(0,15)\ny2=dnorm(x2,mean=20,sd=5)\npolygon(c(0,x2,15),c(0,y2,0),col='yellow')\nx3=seq(15,25); y3=dnorm(x3,mean=20,sd=5)\npolygon(c(15,x3,25),c(0,y3,0),col='green')\ndata.frame(p1,p2,p3)`,
+a:"seq(0,40) = 0,1,...,40; dnorm = height of the curve (density), pnorm = area to the left; mean=, sd= = μ and σ; type='l' = line; polygon(x,y,col=) = fills an area (the extra 0 values close it on the x-axis). 'more than 25' = right tail = 1-pnorm(25,20,5) (the lab uses pnorm(40)-pnorm(25), which cuts off beyond 40, hence 0.1586236 not 0.1586553).",
+o:"p1=0.1586553, p2=0.1586236, p3=0.6826895. Bell curve centred at 20, yellow left tail, green middle, red right tail.",e:"mean,sd -> pnorm for left area -> subtract for 'between' -> polygon.",v:"dnorm vs pnorm? Height vs cumulative area."}]},
+{n:7,t:"Testing of hypothesis for one sample mean and proportion from real time problems",qs:[
+{q:"Suppose the mean weight of King Penguins ... was 15.4 kg. In a sample of 35 penguins ... the mean penguin weight is 14.6 kg. Assume the population standard deviation is 2.5 kg. At 0.05 significance level, can we reject the null hypothesis that the mean penguin weight does not differ from last year?",
+m:"Is 14.6 kg different enough from 15.4 kg to say the mean really changed?",
+c:"<b>One-sample z-test</b> (n>30, σ known): z=(x̄-μ0)/(σ/√n). H0: μ=15.4; H1: μ≠15.4 (two-tailed). Reject if |z|>1.96 or p<α.",
+code:`xbar=14.6\nmu0=15.4\nsigma=2.5\nn=35\nz=(xbar-mu0)/(sigma/sqrt(n))\nalpha=0.05\nzhalfalpha=qnorm(1-(alpha/2))\nc(-zhalfalpha,zhalfalpha)\npval=2*pnorm(z)\nif(pval>alpha){print("Accept Null hypothesis")} else{print("Reject Null hypothesis")}`,
+a:"sqrt() = square root; qnorm(prob) = z-value with that area to its left (critical value); 1-alpha/2 because the 5% is split into two tails; 2*pnorm(z) = two-tailed p-value (valid because z is negative); if(cond){...} else{...} = decision; print() shows text. Changing alpha to 0.10 makes rejection easier.",
+o:"z=-1.893146; critical ±1.959964; p=0.05833852 -> Accept Null (fail to reject).",e:"Hypotheses -> z formula -> qnorm -> p -> compare.",v:"Why z not t? Large sample and σ known."},
+{q:"The fatality rate of typhoid patients is believed to be 17.26%. In a certain year 640 patients ... only 63 died. Can you consider the hospital efficient?",
+m:"Is the death proportion 63/640 genuinely lower than 17.26%?",
+c:"<b>One-sample proportion z-test</b>: z=(p-P)/√(PQ/n), Q=1-P.",
+code:`n=640\nSprop=63/n\nPprop=0.1726\nq=1-Pprop\nz=(Sprop-Pprop)/sqrt(Pprop*q/n)\nE=qnorm(.975)\nc(-E,E)\nSprop+c(-E,E)*sqrt(Pprop*(1-Pprop)/n)\nif(z>-E && z<E){print("Hospital is not efficient")} else{print("Hospital is efficient")}`,
+a:"Sprop = sample proportion p; Pprop = claimed population proportion P; q = 1-P; && = logical AND; c(-E,E) = lower and upper limit; the CI line adds ± margin to p.",
+o:"Sprop=0.0984375, z=-4.964736, critical ±1.959964, CI 0.06916 to 0.12772 -> 'Hospital is efficient' (reject H0).",
+w:"<span class='warn'>"+U+": the lab's CI uses the claimed P in the margin; textbooks usually use the sample p. Reproduce the lab code as given.</span>",e:"p, P, Q -> z -> compare with ±1.96 -> state in words.",v:"Why efficient? z is far in the left tail: the death rate is significantly below 17.26%."}]},
+{n:8,t:"Testing of hypothesis for two sample means and proportion from real time problems",qs:[
+{q:"In a random sample of size 500, the mean is found to be 20. In another independent sample of size 400, the mean is 15. Could the samples have been drawn from the same population with S.D 4?",
+m:"Is the difference of 5 between two sample means too big to be chance?",
+c:"<b>Two-sample z-test</b>: z=(x̄-ȳ)/(σ√(1/n1+1/n2)). H0: both means equal.",
+code:`xbar=20\nybar=15\nsigma=4\nn1=500\nn2=400\nz=(xbar-ybar)/(sigma*sqrt((1/n1)+(1/n2)))\nalpha=0.05\nzalpha=qnorm(1-(alpha/2))\nif(z<=zalpha){print("Accept Null hypothesis")} else{print("Reject Null hypothesis")}`,
+a:"Same z-test pattern as Lab 7; sigma is common S.D.; the bracket (1/n1)+(1/n2) is inside sqrt.",o:"z=18.6339, critical 1.959964 -> Reject Null hypothesis.",e:"Formula -> z -> qnorm -> compare.",v:"Why reject? 18.6 is far beyond 1.96, so the samples are not from the same population."},
+{q:"In a large city A, 20% of a random sample of 900 school boys had a slight physical defect. In another large city B, 18.5% of a random sample of 1600 school boys had the same defect. Is the difference between the proportions significant?",
+m:"Is 20% vs 18.5% a real difference?",
+c:"<b>Two-proportion z-test</b>: P=(n1p1+n2p2)/(n1+n2), z=(p1-p2)/√(PQ(1/n1+1/n2)).",
+code:`p1=0.20\np2=0.185\nn1=900\nn2=1600\nP=(n1*p1+n2*p2)/(n1+n2)\nQ=1-P\nz=(p1-p2)/sqrt(P*Q*sqrt((1/n1)+(1/n2)))\nalpha=0.05\nzalpha=qnorm(1-(alpha/2))\nif(z<=zalpha){print("Accept Null hypothesis")} else{print("Reject Null hypothesis")}`,
+a:"P = pooled proportion (assumes H0: equal proportions); Q = 1-P.",
+o:"P=0.1904, z=0.1871665 (as printed), critical 1.959964 -> Accept Null.",
+w:"<span class='warn'>"+U+": the lab code has an extra sqrt: sqrt(P*Q*sqrt(...)). The formula is sqrt(P*Q*(1/n1+1/n2)), which gives z≈0.924 (still Accept Null). Use the formula version if asked; tell sir the printed code has a typo.</span>",e:"Pool P -> z -> compare.",v:"Why pool? Under H0 both samples share one proportion."}]},
+{n:9,t:"Applying the t-test for independent and dependent samples",qs:[
+{q:"Problem 1 (Student's t-test): Two independent samples of sizes 8 and 7 ... Is the difference between the sample means significant?",
+m:"Compare two small groups' averages.",
+c:"<b>Two-sample t-test</b> (n<30, σ unknown). t.test() defaults to Welch (unequal variances) with fractional df. H0: equal means.",
+code:`sample1=c(19,17,15,21,16,18,16,14)\nsample2=c(15,14,15,19,15,18,16,20)\nt=t.test(sample1,sample2)\ncv=t$statistic\ntv=qt(0.975,14)\nif(cv <= tv){print("Accept Ho")} else{print("Reject Ho")}`,
+a:"t.test(x,y) = two-sample t-test; t$statistic = pull one item from the result list with $; qt(0.975,14) = critical t with 14 df, 2.5% upper tail; if/else as before. (If paired=FALSE, the default, samples are independent.)",
+o:"t=0.44721, df=13.989, p=0.6616, CI -1.898 to 2.898, means 17.0 and 16.5; critical 2.144787 -> Accept Ho.",
+w:"<span class='warn'>"+U+": the sheet says sizes 8 and 7 but both samples contain 8 values.</span>",e:"t.test -> t statistic -> qt -> compare (or p>0.05).",v:"Why t not z? Small sample, σ unknown."},
+{q:"Problem 2 (Paired t-test): marks of 10 students in two tests, beginning and end of year ... Do the data indicate that the students have got benefited by coaching?",
+m:"Same people measured twice: is the average change zero?",
+c:"<b>Paired t-test</b> on differences d: t=d̄/(s/√n). H0: mean difference = 0.",
+code:`test1=c(19,17,15,21,16,18,16,14,19,20)\ntest2=c(15,14,15,19,15,18,16,20,22,19)\nt=t.test(test1,test2,paired=TRUE)\nalpha=0.05\ntv=t$p.value\nif(tv >alpha){print("Accept Ho")} else{print("Reject Ho")}`,
+a:"paired=TRUE = treat values as before/after pairs; t$p.value = p-value; compare with alpha.",
+o:"Lab prints t=0.46771, df=7, p=0.6542 -> Accept Ho (this is from sample1/sample2).",
+w:"<span class='warn'>"+U+": the lab code calls t.test(sample1,sample2,paired=TRUE), not test1/test2, so the printed output belongs to Problem 1 data. Running test1/test2 will give different numbers (df=9). Test 1 minus Test 2 is what makes sense for 'benefit'; the safest approach is use test1 and test2.</span>",e:"Paired? -> paired=TRUE -> p vs alpha.",v:"Independent vs paired? Paired = same subjects twice."},
+{q:"Problem 3 (F-test): Two independent samples of sizes 8 and 7 ... Is the difference between the sample means significant? (F-test compares variances.)",
+m:"Check whether the two groups have equal spread.",
+c:"<b>F-test</b>: F=s1²/s2², compare with qf(0.95,df1,df2). H0: variances equal.",
+code:`f=var.test(sample1,sample2)\ncv=f$statistic\ntv=qf(0.95,7,7)\nif(cv <= tv){print("Accept Ho")} else{print("Reject Ho")}`,
+a:"var.test = F-test for two variances; qf(p,df1,df2) = critical F value.",o:"F=1.0588, df 7 and 7, p=0.9418, critical 3.787044 -> Accept Ho.",e:"var.test -> F vs qf.",v:"Why do an F-test? To check equal variances before a standard t-test."}]},
+{n:10,t:"Applying Chi-square test for goodness of fit test and Contingency test to real dataset",qs:[
+{q:"Problem 1: Five coins are tossed 256 times. The number of heads ... is given (0:5, 35, 75, 84, 45, 12). Examine if the coins are unbiased by employing chi-square goodness of fit.",
+m:"Do the observed head counts match what a fair coin would give?",
+c:"<b>Goodness of fit</b>: χ²=Σ(O-E)²/E; expected from binomial dbinom(x,5,0.5)*256; df shown in lab as n=5 (note: textbook df = categories-1 = 5).",
+code:`n=5\nalpha=0.05\nN=256\nP = 0.5\nx = c(0:n)\nobf = c(5,35,75,84,45,12)\nexf = (dbinom(x,n,P)*256)\nchisq<-sum((obf-exf)^2/exf)\ncv = chisq\ntv = qchisq(1-alpha,n)\nif(cv <= tv){print("Accept H0/Fit is good")} else{print("Reject H0/Fit is not good")}`,
+a:"obf = observed; exf = expected; (obf-exf)^2/exf = elementwise; sum() = Σ; qchisq(1-alpha,df) = critical value; here the df argument is n=5.",o:"exf=8,40,80,80,40,8; χ²=4.8875; critical 11.0705 -> Accept H0 (fit is good).",e:"Expected via dbinom -> χ² -> qchisq.",v:"Why chi-square? Compares categorical counts with expected counts."},
+{q:"Problem 2: state whether the condition of the child is associated with the condition of the house (3x2 table 69,51 / 81,20 / 35,44).",
+m:"Are two categorical variables independent?",
+c:"<b>Test of independence</b>: H0: not associated. chisq.test(matrix) calculates expected counts itself.",
+code:`data<-matrix(c(69,51,81,20,35,44),ncol=2,byrow=T)\ncv=chisq.test(data)\ncv=cv$p.value\nif(cv >alpha){print("Attributes are independent")} else{print("Attributes are not independent")}`,
+a:"matrix(..., ncol=2, byrow=T) = 2 columns, fill rows first; chisq.test() = Pearson test; $p.value = extract p; alpha must still be defined from Problem 1.",o:"X-squared=25.629, df=2, p=2.721e-06 -> Attributes are not independent.",e:"matrix -> chisq.test -> p vs alpha.",v:"df for 3x2? (3-1)(2-1)=2."}]}
+];
+const G={
+"R Syntax Guide":`<dl><dt>&lt;- vs =</dt><dd>&lt;- assigns a value to a name. = works too, but inside a function call (size = 10) it supplies a named argument.</dd><dt>c()</dt><dd>combine values into a vector.</dd><dt>$</dt><dd>data$col picks a column (vector). data[["col"]] same vector; data["col"] a one-column data frame.</dd><dt>~</dt><dd>formula: left = response, right = predictor(s). y~x1+x2.</dd><dt>TRUE/FALSE (T/F)</dt><dd>logical values, e.g. beside=T, paired=TRUE.</dd><dt>"text"</dt><dd>quotes = text (method="pearson"); no quotes = an R object.</dd><dt>==, &&, :</dt><dd>equality test; AND; sequence 0:n.</dd><dt>(1:10)</dt><dd>[1] at the start of output is just the index of the first value.</dd></dl>`,
+"R Functions Guide":`<table><tr><th>Function</th><th>Use</th><th>Lab</th></tr><tr><td>c, data.frame, factor, subset</td><td>build/label/split data</td><td>1-2</td></tr><tr><td>summary, table, var, sd, cov, cor</td><td>describe</td><td>2-3</td></tr><tr><td>plot, pie, barplot, boxplot, legend, abline, polygon</td><td>charts</td><td>2-6</td></tr><tr><td>lm, cor.test, predict</td><td>regression/correlation</td><td>3-4</td></tr><tr><td>dbinom/pbinom, dpois, dnorm/pnorm</td><td>distributions</td><td>5-6</td></tr><tr><td>qnorm, qt, qf, qchisq</td><td>critical values</td><td>7-10</td></tr><tr><td>t.test, var.test, chisq.test</td><td>tests</td><td>9-10</td></tr><tr><td>sum, weighted.mean, round, sqrt, seq</td><td>maths helpers</td><td>5-8</td></tr></table>`,
+"Probability Distributions":`<div class=card><b>Naming guide:</b> d = value at a point (density/probability), p = cumulative P(X≤x), q = quantile (value for a probability), r = random numbers. Root: binom, pois, norm, t, f, chisq. Example: dbinom, pbinom, qnorm, pnorm. Lab uses d, p, q only (r not used).</div><table><tr><th>Distribution</th><th>Type</th><th>Parameters</th><th>Use when</th></tr><tr><td>Binomial</td><td>discrete</td><td>n, p</td><td>successes in n trials</td></tr><tr><td>Poisson</td><td>discrete</td><td>λ</td><td>rare events per interval</td></tr><tr><td>Normal</td><td>continuous</td><td>μ, σ</td><td>measurements</td></tr><tr><td>t / F / χ²</td><td>continuous</td><td>df</td><td>small-sample tests</td></tr></table>`,
+"Plotting Master Guide":`<table><tr><th>Function</th><th>Purpose</th><th>Lab</th></tr><tr><td>plot(x,y)</td><td>scatter or line</td><td>2,3,5,6</td></tr><tr><td>pie, barplot, boxplot</td><td>categories / groups</td><td>2</td></tr><tr><td>abline(model)</td><td>regression line</td><td>3</td></tr><tr><td>polygon</td><td>shaded area</td><td>6</td></tr><tr><td>scatterplot3d</td><td>3-D scatter, plane3d for plane</td><td>4</td></tr></table><p>Arguments used: main, xlab, ylab (labels), col (colour), type ("l","h"), xlim/ylim (range), beside (bar layout), fill, bty. ggplot2 and hist() do not appear in your labs.</p>`,
+"Formula Sheet":`<table><tr><th>Name</th><th>Formula</th><th>R</th></tr><tr><td>Pearson r</td><td>cov(x,y)/(sd x · sd y)</td><td>cor(x,y)</td></tr><tr><td>Regression</td><td>Y=a+bX</td><td>lm(Y~X)</td></tr><tr><td>Binomial</td><td>C(n,x)p^x(1-p)^(n-x); np; np(1-p)</td><td>dbinom(x,n,p)</td></tr><tr><td>Poisson</td><td>e^-λ λ^x/x!; E=Var=λ</td><td>dpois(x,lambda)</td></tr><tr><td>Normal</td><td>pdf with μ,σ</td><td>dnorm, pnorm</td></tr><tr><td>One-sample z</td><td>(x̄-μ)/(σ/√n)</td><td>(xbar-mu0)/(sigma/sqrt(n))</td></tr><tr><td>Two-mean z</td><td>(x̄-ȳ)/(σ√(1/n1+1/n2))</td><td>as lab</td></tr><tr><td>Proportion z</td><td>(p-P)/√(PQ/n)</td><td>as lab</td></tr><tr><td>t paired</td><td>d̄/(s/√n)</td><td>t.test(paired=TRUE)</td></tr><tr><td>F</td><td>s1²/s2²</td><td>var.test</td></tr><tr><td>χ²</td><td>Σ(O-E)²/E</td><td>sum((o-e)^2/e), chisq.test</td></tr></table>`,
+"Exam Identification Guide":`<table><tr><th>Wording</th><th>Method</th></tr><tr><td>combine, assign, member-wise</td><td>vector arithmetic</td></tr><tr><td>relationship, predict, regression line</td><td>cor / lm</td></tr><tr><td>exactly / at least / at most, n trials, p</td><td>dbinom / pbinom</td></tr><tr><td>defects per box, rare events</td><td>dpois</td></tr><tr><td>proportion of jobs less/more/between (mean, S.D.)</td><td>pnorm</td></tr><tr><td>large sample, σ known, means</td><td>z-test + qnorm</td></tr><tr><td>fatality rate, % of sample</td><td>proportion z-test</td></tr><tr><td>small samples, means</td><td>t.test; before/after → paired=TRUE</td></tr><tr><td>variances</td><td>var.test</td></tr><tr><td>frequencies fit / associated</td><td>chi-square</td></tr></table>`,
+"Night-Before Revision":`<div class=card><b>Hypothesis steps:</b> H0/H1 → statistic → critical value (q-function) or p → compare → conclusion in words. Reject if |stat|>critical or p&lt;α (0.05).</div><div class=card><b>Must-know:</b> dbinom, pbinom, dpois, dnorm, pnorm, qnorm, qt, qf, qchisq, lm, summary, cor.test, t.test (paired), var.test, chisq.test, plot args (main, xlab, ylab, col, type).</div><div class=card><b>Mistakes:</b> p-value vs probability; forgetting alpha/2 for two tails; "at least" needs 1-pbinom(k-1); t.test paired=TRUE; load packages with library().</div><div class=card><b>Check in the labs:</b> Lab 3 BMI data/interpretation, Lab 4 R² text, Lab 8 proportion sqrt, Lab 9 paired variables.</div>`
+};
+const side=document.getElementById('side'),V=document.getElementById('v');
+let practice=false;
+const all=[];LABS.forEach(l=>l.qs.forEach((q,i)=>all.push({l,q,i})));
+function nav(){let h='<h1>R Statistics Lab Academy</h1><small>Probability &amp; Statistics — RStudio learning and exam prep</small><a onclick="go(\'home\')">Home</a><b>Labs</b>';
+LABS.forEach(l=>h+=`<a onclick="go(${l.n})">Lab ${l.n}</a>`);h+='<b>Guides</b>';Object.keys(G).forEach(k=>h+=`<a onclick="go('${k}')">${k}</a>`);h+='<a onclick="go(\'map\')">Question → Concept Map</a><a onclick="go(\'dict\')">Code Dictionary</a>';side.innerHTML=h}
+function cp(b){navigator.clipboard.writeText(b.nextElementSibling.textContent).then(()=>{b.textContent='Copied!';setTimeout(()=>b.textContent='Copy code',1500)})}
+function code(c){return `<div style="position:relative"><button class=cp onclick="cp(this)">Copy code</button><pre>${E(c)}</pre></div>`}
+function qcard(o,k){const{l,q,i}=o;const sol=`<div class=card><b>What is it asking?</b><br>${q.m}</div><div class=card><b>Concept</b><br>${q.c}</div>${q.w||''}${code(q.code)}<details open><summary>Code anatomy (every term)</summary><div>${q.a.split(/;\s/).map(x=>'<p>'+E(x)+'</p>').join('')}</div></details><details><summary>Expected output &amp; interpretation</summary><div>${E(q.o)}</div></details><details><summary>30-second exam approach</summary><div>${E(q.e)}</div></details><details><summary>Viva</summary><div>${E(q.v)}</div></details><details><summary>Run in RStudio</summary><div>File → New File → R Script → paste → Ctrl+Enter (Run) → read Console and Plots pane → save script. Packages: install.packages("name") once, library(name) every session.</div></details>`;
+const pr=`<details><summary>Hint 1: concept</summary><div>${q.c}</div></details><details><summary>Hint 2: function names</summary><div>${E(q.a.slice(0,160))}…</div></details><details><summary>Full solution</summary><div>${sol}</div></details>`;
+return `<div class="card q" data-k="${k}"><span class=tag>Lab ${l.n}</span><span class=tag>Q${i+1}</span><h3>${E(q.q)}</h3>${practice?pr:sol}</div>`}
+function go(x){window.scrollTo(0,0);side.classList.remove('open');[...side.querySelectorAll('a')].forEach(a=>a.classList.remove('on'));
+if(x=='home'){const fn=new Set();LABS.forEach(l=>l.qs.forEach(q=>(q.code.match(/[A-Za-z_.][\w.]*(?=\()/g)||[]).forEach(f=>fn.add(f))));
+V.innerHTML=`<h2>R Statistics Lab Academy</h2><p>Question → concept → formula → code → anatomy → output → viva, built from your 10 lab sheets. Items marked <b>${U}</b> are real inconsistencies I found in the sheets.</p><div class=grid><div class=stat><b>10</b>Labs</div><div class=stat><b>${all.length}</b>Questions</div><div class=stat><b>${fn.size}</b>R functions</div><div class=stat><b>12</b>Tests/distributions</div></div><div class=card><label><input type=checkbox onchange="practice=this.checked"> Practice mode (hints before solution)</label></div>`;return}
+if(typeof x=='number'){const l=LABS[x-1];V.innerHTML=`<h2>Lab ${l.n}: ${E(l.t)}</h2><div class=card><label><input type=checkbox ${practice?'checked':''} onchange="practice=this.checked;go(${x})"> Practice mode</label></div>`+l.qs.map((q,i)=>qcard({l,q,i},'')).join('');return}
+if(x=='map'){V.innerHTML='<h2>Question → Concept Map</h2><table><tr><th>Lab</th><th>Question</th><th>Key functions</th></tr>'+all.map(o=>`<tr><td>${o.l.n}</td><td>${E(o.q.q.slice(0,70))}…</td><td>${E([...new Set(o.q.code.match(/[A-Za-z_.][\w.]*(?=\()/g)||[])].slice(0,6).join(', '))}</td></tr>`).join('')+'</table>';return}
+if(x=='dict'){const m={};all.forEach(o=>(o.q.code.match(/[A-Za-z_.][\w.]*(?=\()/g)||[]).forEach(f=>m[f]=m[f]||'Lab '+o.l.n));V.innerHTML='<h2>Code Dictionary</h2><p>Functions in your labs (first lab seen). Meanings are in each question’s Code anatomy.</p><table><tr><th>Function</th><th>First used</th></tr>'+Object.keys(m).sort().map(f=>`<tr><td>${f}()</td><td>${m[f]}</td></tr>`).join('')+'</table>';return}
+V.innerHTML=`<h2>${x}</h2>`+G[x]}
+function srch(t){t=t.toLowerCase().trim();if(!t){go('home');return}const r=all.filter(o=>(o.q.q+o.q.m+o.q.c+o.q.code+o.q.a+o.q.v+'lab '+o.l.n).toLowerCase().includes(t));V.innerHTML=`<h2>${r.length} result(s)</h2>`+r.map(o=>qcard(o,'')).join('')}
+nav();go('home');
+</script></body></html>
